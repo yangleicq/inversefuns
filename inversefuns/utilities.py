@@ -1,6 +1,6 @@
 import sympy
 import numpy as np
-import matplotlib
+
 
 def get_coef(expr,vari, trun=30, period=1.0):
     """
@@ -95,7 +95,3 @@ def coef_domain2(an1_mid, bn1_mid, an2_mid, bn2_mid, random_start=1, halfwidth0=
     return domain
 
 
-
-def plot_cdf(data):
-    sorted_data = np.sort(data)
-    matplotlib.pyplot.plot(sorted_data, np.linspace(0,1,sorted_data.size),lw=2)
