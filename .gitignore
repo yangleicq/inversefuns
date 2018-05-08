@@ -8,3 +8,5 @@
 /*.egg-info
 *.p
 figures_linearode/
+
+.idea/
