@@ -1,10 +1,15 @@
+"""
+This module contains utility functions, including domain generation, random sampling and Fourier expansion
+"""
+
+
 import sympy
 import numpy as np
 
 
 def get_coef(expr,vari, trun=30, period=1.0):
     """
-    Calculate Fourier coefficients of symbolic expression of some function
+    Calculate Fourier coefficients based on symbolic expression of functions
     :param expr: Symbolic expression of a function on which Fourier expansion is performed
     :param vari: variable of the symbolic expression
     :param trun: Truncation terms
@@ -17,14 +22,15 @@ def get_coef(expr,vari, trun=30, period=1.0):
 
 
 def fourier_exp(t,an,bn,trun=10, period=1.0):
-    '''
+    """
+    Evaluate Fourier expansion given Fourier coefficients
     :param t: Vector where the function need to be evaluated
     :param an: List/np.ndarray of coefficients of sin in Lambda, from a0 to an
     :param bn: List/np.ndarray of coefficients of cos in Lambda, from b0 to bn
     :param trun: Number of truncation terms
     :param period: Period
     :return:  function value
-    '''
+    """
     trunAn=trunBn=trun
     if trunAn>len(an)-1:
         trunAn=len(an)-1
@@ -39,9 +45,43 @@ def fourier_exp(t,an,bn,trun=10, period=1.0):
     bn_val=bn_coe*np.sin(2*np.pi*bn_ran*t/period)
     return an0+np.sum(an_val,axis=0)+np.sum(bn_val,axis=0)
 
+
+def fourier_exp_vec(t,an,bn,trun=30, period=1):
+    """
+    Evaluate Fourier expansion given Fourier coefficients (vectorized version, faster)
+    :param t: Vector where the function need to be evaluated
+    :param an: List/np.ndarray of coefficients of sin in Lambda, from a0 to an
+    :param bn: List/np.ndarray of coefficients of cos in Lambda, from b0 to bn
+    :param trun: Number of truncation terms
+    :param period: Period
+    :return:  function value on t
+    """
+    trunAn=trunBn=trun
+    t = np.array(t)
+    if trunAn>len(an)-1:
+        trunAn=len(an)-1
+
+    if trunBn>len(bn)-1:
+        trunBn=len(bn)-1
+
+    an0=an[0]*0.5
+    an_coe=np.asarray(an[1:])
+    bn_coe=np.asarray(bn[1:])
+    an_ran=np.arange(1,trunAn+1,dtype=float)
+    bn_ran=np.arange(1,trunBn+1,dtype=float)
+    if t.shape:
+        length = t.shape[0]
+    else:
+        length = 1
+    an_val=np.reshape(np.repeat(an_coe,length),(trunAn,length))*np.cos(2*np.pi*np.outer(an_ran,t)/period)
+    bn_val=np.reshape(np.repeat(bn_coe,length),(trunBn,length))*np.sin(2*np.pi*np.outer(bn_ran,t)/period)
+    return an0+np.sum(an_val,axis=0)+np.sum(bn_val,axis=0)
+
+
+
 def halfcube(random_start=0,random_end=32,halfwidth0=1,pow=-1):
     """
-    produce a halfcube with given dimension and shrinkage
+    Produce a halfcube with given dimension and decaying power
     :param random_start: decay starting parameter
     :param random_end: decay ending parameter
     :param halfwidth0: base halfwidth
@@ -53,7 +93,7 @@ def halfcube(random_start=0,random_end=32,halfwidth0=1,pow=-1):
     return ran**pow*halfwidth0
 
 def coef_domain(an_mid, bn_mid, random_start=0, halfwidth0=1, pow=-1):
-    r"""
+    """
     return the parameter domain centered at the an and bn points
     """
     # override random_end with size of an_mid
@@ -81,7 +121,7 @@ def coef_domain(an_mid, bn_mid, random_start=0, halfwidth0=1, pow=-1):
 
 
 def coef_domain2(an1_mid, bn1_mid, an2_mid, bn2_mid, random_start=1, halfwidth0=1, pow=-1):
-    r"""
+    """
     return the parameter domain centered at the an1, bn1, an2, bn2
     """
     domain1 = coef_domain(an1_mid, bn1_mid, random_start=random_start, halfwidth0=halfwidth0, pow=pow)

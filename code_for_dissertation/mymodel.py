@@ -1,7 +1,10 @@
+"""
+Evaluate the true Fourier coefficients of a given function x(1-x),
+generate the domain based on that and define the model Q:\Lambda \to D
+"""
 
 import sympy
-from inversefuns.utilities import get_coef, coef_domain
-from inversefuns.linearode import linear_ode_fourier, fourier_exp_vec
+from inversefuns.utilities import get_coef, coef_domain, fourier_exp_vec
 import numpy as np
 
 param_len = 5
@@ -15,7 +18,6 @@ def true_param():
 
 
 def my_model_domain(pow=-1,halfwidth0=0.5):
-    # This will take some time because we are evaluating oscillatory function integration
     an = bn = np.zeros(param_len)
     domain = coef_domain(an, bn, pow=pow, halfwidth0=halfwidth0)
     return domain

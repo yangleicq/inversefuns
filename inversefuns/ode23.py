@@ -1,4 +1,8 @@
-#from __future__ import division
+"""
+This module contains functions for two dimensional(dual lambda example) and three dimensional(Lorentz example) ODE
+"""
+
+
 import numpy as np
 from utilities import fourier_exp
 import sympy
@@ -6,7 +10,7 @@ import sympy
 
 
 
-### dual lambda example
+
 def lambda10(t):
     return 1/(2*(1+t**2))
 
