@@ -14,12 +14,12 @@ This package requires the following packages:
 
 The code_for_dissertation folder contains all code files for numerical examples in Ph.D. dissertation of Lei Yang
 
-To generate all plots run::
+To generate all figures run::
 
-python BET_script_linearode.py 2 True
-python BET_script_linearode.py 1 False
-python BET_script_linearode.py 3 False
-python BET_script_linearode.py 4 False
+python BET_linear.py 2 True
+python BET_linear.py 1 False
+python BET_linear.py 3 False
+python BET_linear.py 4 False
 
 This creates all plots for numerical examples in ``figures_linearode``.
 
